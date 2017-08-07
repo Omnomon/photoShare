@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CMS - Express</title>
+    <!-- Latest compiled and minified CSS & JS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row top-30">
+            <div class="col-md-2 col-sm-2">
+                <a class="btn btn-default" href="/blog">Go to Blog</a>
+            </div>
+            <div class="col-md-2 col-sm-2">
+                <a class="btn btn-default" href="/cms">New Post</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="album-container">
+                    <h1>Authors</h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Album Name</th>
+                                <th>Created On</th>
+                                <th>Belongs To </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="form-row">
+                                <form id="album-form">
+                                    <td colspan="4">
+                                        <span>Album Name</span>
+                                        <input placeholder="Enter a name" id="album-name" type="text" />
+                                    </td>
+                                    <td colspan="4">
+                                        <span>Creator name</span>
+                                        <input placeholder="Enter a name" id="creator-name" type="text" />
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-success testbutton">Create Album and Creator</button>
+                                    </td>
+                                </form>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </d>
+        <!-- Custom Script -->
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $(document).on("submit", handleFormSubmit)
+
+            function handleFormSubmit() {
+                event.preventDefault()
+                if ($("#creator-name").val().trim().length === 0) {
+                    return
+                } else {
+                    $.post("/api/creator", {
+                        name: $("#creator-name").val().trim()
+                    }).then(result => {
+                        console.log(result)
+                        $.post("/api/album", {
+                            title: $("#album-name").val().trim(),
+                            creatorId: result.id
+                        }).then(album => {
+                            console.log(album)
+                        })
+                    })
+                }
+            }
+
+
+
+        })
+        </script>
+</body>
+
+</html>
